@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>add subscriber</title>
+<style>
+.container{
+overflow:hidden;
+}
+.tab{float:left;}
+.tab-2{
+margin-left:50px;
+
+}
+.tab-2 input{display:block;margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="tab tab-1">
+<table id="table" border="1">
+<tr>
+
+<th>first name</th>
+<th>last name</th>
+<th>age</th>
+<th>Remove</th>
+</tr>
+
+</table>
+
+</div>
+<div class="tab tab-2">
+first name:<input type="text" name="fname" id="fname">
+last name:<input type="text" name="lname" id="lname">
+age:<input type="text" name="age" id="age">
+<button onclick="addHtmlTableRow();">add</button>
+<button>edit</button>
+<button>delete</button>
+</div>
+</div>
+<script>
+function addHtmlTableRow(){
+var table=document.getElementById("table"),
+newRow=table.insertRow(table.length),
+cell1=newRow.insertCell(0),
+cell2=newRow.insertCell(1),
+cell3=newRow.insertCell(2),
+fname=document.getElementById("fname").value,
+lname=document.getElementById("lname").value,
+age=document.getElementById("age").value;
+cell1.innerHTML=fname;
+cell2.innerHTML=lname;
+cell3.innerHTML=age;
+
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
