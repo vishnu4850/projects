@@ -1,0 +1,337 @@
+#include <iostream>
+#include<fstream>
+#include<iomanip>
+#include<Windows.h>
+#include<dos.h>
+#include<cstring>
+#include<stdlib.h>
+#include<sstream>
+using namespace std;
+int count=0;
+class labour{
+	struct lab
+	{
+		char id[10], name[20],dept[20],phone[20],sex[10];
+	};
+	public: void add();
+	        void searchusingname();
+	        void searchusingid();
+			void modify();
+			void unpack();
+            void delete1();
+            };
+
+void labour :: add()
+{
+
+	char buffer[100],temp[50],id[10],temp1[50],name[20],name2[20];
+	int pos1 , flag=0;
+	lab l;char v[15];
+	fstream out;
+	out.open("index.txt",ios::in |ios ::out|ios::app);
+
+	cout<<"enter id\t\t\:";
+	cin>>l.id;
+	cout<<" enter name\t\t:";
+	cin>>l.name;
+	while(isdigit(l.name[0])||ispunct(l.name[0]))
+    {
+        cout<<"invalid input enter again  :";
+cin>>l.name;
+    }
+
+
+   // cin>>l.name;
+    cout<<"enter dept\t\t:";
+    cin>>l.dept;
+    cout<<"enter phone no\t\t:";
+    cin>>l.phone;
+    while(!isdigit(l.phone[20]))
+    {
+
+        if(isdigit(l.phone[0]))
+        {
+
+
+            if(strlen(l.phone)==10)
+                break;
+        }
+
+
+        cout<<"invalid input enter again";
+        cin>>l.phone;
+    }
+    cout<<"enter sex\t\t:";
+    cin>>l.sex;
+    while(isdigit(l.sex[0])||(l.sex!="male" && l.sex!="female"))
+    {
+        if((strcmp(l.sex,"male")==0) || strcmp(l.sex,"female")==0)
+            break;
+        cout<<"invalid input enter again  :";
+        cin>>l.sex;
+    }
+	while(1)
+	{
+	   out.getline(temp,50,'$');
+	   if(out.eof())
+	   break;
+	   sscanf(temp,"%[^|]|%[^|]|%d|$",id , name ,&pos1);
+	   if(strcmp(l.id,id)==0)
+	   {
+	   	flag=1;
+
+	   	break;
+
+	   }
+
+	}
+	out.close();
+	if(flag==1)
+	cout<<"\n primary key constraint violation, record not inserted\n";
+	else
+	{
+		fstream out1;//,out;
+    out1.open("labourdetails.txt",ios::app);
+    out.open("index.txt",ios::app);
+    out1.seekp(0,ios::end);
+    long pos=out1.tellp();
+    sprintf(buffer,"%s|%s|%s|%s|%s|$",l.id,l.name,l.dept,l.phone,l.sex);
+    out1<<buffer;
+    sprintf(temp1,"%s|%s|%ld|$",l.id,l.name,pos);
+    out<<temp1;
+    out1.close();
+    out.close();
+  }
+}
+
+void labour::unpack()
+{
+    system("cls");
+	lab l;
+	int n=0;
+	char buffer[100],temp[50];
+	fstream ifile1,ifile2;
+	ifile1.open("labourdetails.txt",ios::in);
+	ifile2.open("index.txt",ios::in);
+	cout<<"id\t\t\t   name\t\t\t           dept\t\t\t                   phone\t\t   sex\t\t\t  "<<endl;
+	 //system("cls");
+
+	while(n<count){
+
+    ifile1.getline(buffer,100,'$');
+	sscanf(buffer,"%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%[^$]",l.id,l.name,l.dept,l.phone,l.sex,temp);
+    cout<<l.id<<"\t\t\t   "<<l.name<<"\t\t\t   "<<l.dept<<"\t\t\t         "<<l.phone<<"\t\t   "<<l.sex<<"    "<< endl;
+	n++;
+    }
+	ifile1.close();
+	ifile2.close();
+	return;
+}
+
+void labour::searchusingname()
+{
+    system("cls");
+    int n=0;
+    char buffer[100],temp[50],name[20],id[10],name1[20];
+    int pos,flag=0; lab l;
+    system("COLOR 4F");
+    cout<<"\nEnter Name to be searched: ";
+    cin>>name;
+    fstream in2,in1;
+    in2.open("index.txt",ios::in);
+    in1.open("labourdetails.txt",ios::in);
+    while(n<count)
+    {
+    in2.getline(temp,50,'$');
+    if(in2.eof())
+      break;
+    sscanf(temp,"%[^|]|%[^|]|%d|$",id,name1,&pos);
+    in1.getline(buffer,100,'$');
+    sscanf(buffer,"%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%[^$]",l.id,l.name,l.dept,l.phone,l.sex,temp);
+    if(strcmp(name,name1)==0)
+    {
+      flag=1;
+      	cout<<"id\t\t\t name\t\t\t dept\t\t\t phone\t\t\t sex"<<endl;
+        cout<<l.id<<"\t\t\t "<<l.name<<"\t\t\t "<<l.dept<<"\t\t\t "<<l.phone<<"\t\t\t "<<l.sex<<"\t\t\t ";
+    }
+    n++;
+  }
+  if(flag==0)
+  cout<<"\nRecord does not exist";
+  in1.close();
+  in2.close();
+}
+
+void labour::searchusingid()
+{
+    system("cls");
+    int n=0;
+    char buffer[100],temp[50],name[20],id[10],name1[20],id1[10];
+    int pos,flag=0; lab l;
+    system("COLOR 4F");
+    cout<<"\nEnter id to be searched: ";
+    cin>>id;
+    fstream in2,in1;
+    labour lb;
+    in2.open("index.txt",ios::in);
+    in1.open("labourdetails.txt",ios::in);
+    while(1)
+    {
+    in2.getline(temp,50,'$');
+    if(in2.eof())
+      break;
+    sscanf(temp,"%[^|]|%[^|]|%d|$",id1,name1,&pos);
+    in1.getline(buffer,100,'$');
+    sscanf(buffer,"%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%[^$]",l.id,l.name,l.dept,l.phone,l.sex,temp);
+    if(strcmp(id,id1)==0)
+    {
+      flag=1;
+      	cout<<"id\t\t\t name\t\t\t dept\t\t\t phone\t\t\t sex"<<endl;
+        cout<<l.id<<"\t\t\t "<<l.name<<"\t\t\t "<<l.dept<<"\t\t\t "<<l.phone<<"\t\t\t "<<l.sex<<"\t\t\t ";
+    }
+    n++;
+}
+  if(flag==0)
+  cout<<"\nRecord does not exist";
+  in1.close();
+  in2.close();
+}
+
+
+	void labour::delete1()
+ {
+     system("cls");
+  char buffer[100],temp[50],name[15],name2[11],id[10];
+  int pos,flag=0; lab l;
+  cout<<"\nEnter name to be Deleted: ";
+  cin>>name;
+  fstream in1,in2;
+  fstream of1,of2;
+  in1.open("index.txt",ios::in);
+  in2.open("labourdetails.txt",ios::in);
+  of1.open("index1.txt",ios::out);
+  of2.open("stud61.txt",ios::out);
+  while(1)
+  {
+    in1.getline(temp,50,'$');
+    if(in1.eof())
+     break;
+    in2.getline(buffer,100,'$');
+    sscanf(temp,"%[^|]|%[^|]|%[^|]|%d|$",id,name2,&pos);
+    strcat(buffer,"$");
+    strcat(temp,"$");
+    if(strcmp(name,name2)!=0)
+    {
+      long pos=of2.tellp();
+      sprintf(temp,"%s|%s|%ld|$",id,name2,pos);
+      of1<<temp;
+      of2<<buffer;
+    }
+    else
+     flag=1;
+  }
+  if(flag) cout<<"\nRecord Deleted"; else cout<<"\nRecord does not exist";
+  in1.close(); in2.close();
+  of1.close(); of2.close();
+  remove("index.txt");
+  remove("labourdetails.txt");
+  rename("index1.txt","index.txt");
+  rename("stud61.txt","labourdetails.txt");
+ }
+
+void labour::modify()
+{
+    system("cls");
+  char b[100],name[15],temp[100],id[10];
+  int flag=0;
+  lab l;
+  fstream ifile;
+  ifile.open("labourdetails.txt",ios::in);//read mode
+  int n=0,ch;
+  cout<<"\nEnter name to be modified: ";
+  cin>>name;
+  fstream ofile; //write mode
+  ofile.open("student2.txt",ios::out);
+  while(n<count)
+  {
+    ifile. getline(b,100,'$');
+       sscanf(b,"%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|$",l.id,l.name,l.dept,l.phone,l.sex,temp);
+    if(strcmp(l.name,name)==0)
+    {
+       flag=1;
+       cout<<"\nKey found\n1:Modify dept 2:modify phone \nEnter your choice: ";
+       cin>>ch;
+       switch(ch)
+       {
+	 case 1: cout<<"\nEnter dept: "; cin>>l.dept; break;
+	 case 2: cout<<"\nEnter phone: "; cin>>l.phone;
+                while(!isdigit(l.phone[20]))
+    {
+
+        if(isdigit(l.phone[0]))
+        {
+
+
+            if(strlen(l.phone)==10)
+                break;
+        }
+
+
+        cout<<"invalid input enter again";
+        cin>>l.phone;
+    }
+	  break;
+
+	 default: break;
+       }
+    }
+    sprintf(b,"%s|%s|%s|%s|%s|%s|$",l.id,l.name,l.dept,l.phone,l.sex);
+        ofile<<b;
+
+    n++;
+  }
+  if(flag==0) cout<<"\nKey not found";
+  ofile.close();
+  ifile.close();
+  remove("labourdetails.txt");
+  rename("student2.txt","labourdetails.txt");
+}
+int main()
+{
+     system("cls");
+    system("COLOR 1F");
+  char buffer[100];
+  labour lb;
+  int kb,ch;
+  fstream ifile;
+  ifile.open("labourdetails.txt",ios::in|ios::app);
+  while(!ifile.eof()){
+  	ifile.getline(buffer,100,'$');
+  	count++;
+  }
+  count--;
+
+  ifile.close();
+
+	  for(;;)
+	  {
+
+   		 cout<<"\n  1:add 2:unpack  3.search using name 4: search using id 5:delete  6:modify  7:exit "<<endl;
+        cout<<"enter your choice\n";
+    	cin>>ch;
+
+    	switch(ch)
+    		{
+      			case 1: lb.add(); break;
+      			case 2: lb.unpack();break;
+      			case 3: lb.searchusingname();break;
+      			case 4: lb.searchusingid();break;
+      			case 5: lb.delete1();break;
+      			case 6: lb.modify();break;
+      			default: exit(0);
+    		}
+  		}
+
+
+  //return 0;
+}
