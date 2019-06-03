@@ -12,6 +12,8 @@ margin-left:50px;
 
 }
 .tab-2 input{display:block;margin-bottom:10px;}
+tr{transition:all .25s ease-in-out}
+tr:hover{background-color:#EEE;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -23,9 +25,18 @@ margin-left:50px;
 <th>first name</th>
 <th>last name</th>
 <th>age</th>
-<th>Remove</th>
-</tr>
 
+</tr>
+<tr>
+<td>vis</td>
+<td>vis</td>
+<td>23</td>
+</tr>
+<tr>
+<td>vi</td>
+<td>v</td>
+<td>23</td>
+</tr>
 </table>
 
 </div>
@@ -51,10 +62,24 @@ age=document.getElementById("age").value;
 cell1.innerHTML=fname;
 cell2.innerHTML=lname;
 cell3.innerHTML=age;
-
+selectedRowToInput();
 }
 
-
+function selectedRowToInput()
+{
+var rIndex,table=document.getElementById("table");
+for(var i=1;i < table.rows.length;i++)
+{
+table.rows[i].onclick=functiion()
+{
+rIndex=this.rowIndex;
+document.getElementById("fname").value=this.cells[0].innerHTML;
+document.getElementById("lname").value=this.cells[1].innerHTML;
+document.getElementById("age").value=this.cells[2].innerHTML;
+};
+}
+}
+selectedRowToInput();
 </script>
 
 
